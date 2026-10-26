@@ -1,0 +1,2413 @@
+{
+  "id": "neutral",
+  "name": "Acme Corp",
+  "fullName": "Acme Corporation",
+  "tagline": "Master Data Management — overview & quality insights",
+  "industry": "European B2B distributor",
+  "domain": "acme-corp.com",
+  "logo": "",
+  "palette": {
+    "primary": "#29B5E8",
+    "primaryLight": "#56C8EF",
+    "primaryDark": "#1A8CB8",
+    "secondary": "#11567F",
+    "secondaryLight": "#1E7AAD",
+    "secondaryDark": "#0D3F5E",
+    "accent": "#49D4A9"
+  },
+  "darkBackground": {
+    "default": "#040D21",
+    "paper": "#081A36",
+    "card": "#0D2847",
+    "sidebarGradient": "linear-gradient(180deg, #081A36 0%, #040D21 100%)"
+  },
+  "lightBackground": {
+    "sidebarGradient": "linear-gradient(180deg, #11567F 0%, #0D3F5E 100%)"
+  },
+  "users": [
+    {
+      "email": "benoit.declarens@example.com",
+      "display_name": "Benoit De Clarens",
+      "role": "ADMIN",
+      "country_scope": null,
+      "mdm_roles": [
+        "MDM_ADMIN",
+        "DATA_MANAGER",
+        "DATA_STEWARD",
+        "DATA_OWNER",
+        "PRODUCT_MANAGER",
+        "COMPLIANCE_OFFICER"
+      ],
+      "sf_role": "MDM_ADMIN_ROLE"
+    },
+    {
+      "email": "alice.martin@example.com",
+      "display_name": "Alice Martin",
+      "role": "STEWARD",
+      "country_scope": [
+        "FRA",
+        "BEL"
+      ],
+      "mdm_roles": [
+        "DATA_STEWARD",
+        "DATA_ANALYST"
+      ],
+      "sf_role": "MDM_STEWARD_FRA_BEL"
+    },
+    {
+      "email": "hans.mueller@example.com",
+      "display_name": "Hans Mueller",
+      "role": "STEWARD",
+      "country_scope": [
+        "DEU"
+      ],
+      "mdm_roles": [
+        "DATA_STEWARD",
+        "PRODUCT_MANAGER"
+      ],
+      "sf_role": "MDM_STEWARD_DEU"
+    },
+    {
+      "email": "sarah.jones@example.com",
+      "display_name": "Sarah Jones",
+      "role": "VIEWER",
+      "country_scope": [
+        "GBR"
+      ],
+      "mdm_roles": [
+        "DATA_CONSUMER",
+        "DATA_ANALYST"
+      ],
+      "sf_role": "MDM_VIEWER_ROLE"
+    }
+  ],
+  "defaultUser": "benoit.declarens@example.com",
+  "llmContext": "a European B2B distributor",
+  "languages": [
+    {
+      "code": "en",
+      "label": "English",
+      "default": true
+    },
+    {
+      "code": "fr",
+      "label": "French"
+    },
+    {
+      "code": "de",
+      "label": "German"
+    },
+    {
+      "code": "nl",
+      "label": "Dutch"
+    },
+    {
+      "code": "es",
+      "label": "Spanish",
+      "enabled": false
+    }
+  ],
+  "countries": [
+    {
+      "code": "FRA",
+      "label": "France"
+    },
+    {
+      "code": "GBR",
+      "label": "United Kingdom"
+    },
+    {
+      "code": "DEU",
+      "label": "Germany"
+    },
+    {
+      "code": "NLD",
+      "label": "Netherlands"
+    },
+    {
+      "code": "BEL",
+      "label": "Belgium"
+    },
+    {
+      "code": "ESP",
+      "label": "Spain"
+    }
+  ],
+  "snowflake": {
+    "database": "MDM",
+    "analyticsSchema": "MDM_ANALYTICS",
+    "warehouse": "MDM_WH"
+  },
+  "imageCdn": {
+    "pattern": "",
+    "fallback": "/placeholder-product.png"
+  },
+  "notifications": [
+    {
+      "text": "BNP Paribas / Fortis merge awaiting review",
+      "type": "workflow",
+      "time": "2 min ago",
+      "path": "/match-merge"
+    },
+    {
+      "text": "Cabinet Moreau onboarding: HIGH priority",
+      "type": "workflow",
+      "time": "15 min ago",
+      "path": "/workflows"
+    },
+    {
+      "text": "Product DQ score dropped below 50% (Tork Hand Towel)",
+      "type": "dq",
+      "time": "1h ago",
+      "path": "/data-quality"
+    },
+    {
+      "text": "Greggs PLC: missing email — DQ incomplete",
+      "type": "dq",
+      "time": "3h ago",
+      "path": "/customers"
+    },
+    {
+      "text": "CDC sync completed — 17 tables mirrored",
+      "type": "system",
+      "time": "5h ago",
+      "path": "/"
+    }
+  ],
+  "modules": [
+    {
+      "id": "customer",
+      "label": "Customers",
+      "singular": "Customer",
+      "icon": "People",
+      "table": "mdm.customer",
+      "enabled": true,
+      "allow_create": true,
+      "order": 1,
+      "name_field": "legal_name",
+      "country_scoped": true,
+      "search": {
+        "fields": [
+          "legal_name",
+          "trade_name"
+        ],
+        "fuzzy": {
+          "fields": [
+            "legal_name",
+            "trade_name"
+          ],
+          "threshold": 0.3
+        }
+      },
+      "filters": [
+        {
+          "field": "lifecycle_stage",
+          "label": "Stage",
+          "type": "select",
+          "options_from": "distinct"
+        },
+        {
+          "field": "customer_type",
+          "label": "Type",
+          "type": "select",
+          "options_from": "CUSTOMER_TYPE"
+        },
+        {
+          "field": "country_code",
+          "label": "Country",
+          "type": "select",
+          "options_from": "distinct"
+        },
+        {
+          "field": "segment",
+          "label": "Segment",
+          "type": "select",
+          "options_from": "SEGMENT"
+        }
+      ],
+      "matching": {
+        "enabled": true,
+        "fields": [
+          "legal_name",
+          "tax_id",
+          "city",
+          "country_code"
+        ],
+        "methods": {
+          "exact_keys": {
+            "enabled": true,
+            "keys": [
+              "tax_id",
+              "duns_number",
+              "siret"
+            ]
+          },
+          "fuzzy": {
+            "enabled": true,
+            "threshold": 0.4,
+            "name_field": "legal_name"
+          },
+          "phonetic": {
+            "enabled": true,
+            "fields": [
+              "legal_name",
+              "trade_name",
+              "city"
+            ]
+          },
+          "composite": {
+            "enabled": true,
+            "threshold": 60,
+            "rules": [
+              {
+                "field": "legal_name",
+                "weight": 0.4,
+                "compare": "trigram",
+                "min_sim": 0.3
+              },
+              {
+                "field": "tax_id",
+                "weight": 0.3,
+                "compare": "exact"
+              },
+              {
+                "field": "city",
+                "weight": 0.15,
+                "compare": "trigram",
+                "min_sim": 0.5
+              },
+              {
+                "field": "segment",
+                "weight": 0.075,
+                "compare": "exact"
+              },
+              {
+                "field": "industry_code",
+                "weight": 0.075,
+                "compare": "exact"
+              }
+            ]
+          },
+          "embedding": {
+            "enabled": true,
+            "model": "e5-base-v2",
+            "threshold": 0.85,
+            "description_fields": [
+              "legal_name",
+              "trade_name",
+              "city",
+              "country_code",
+              "segment"
+            ]
+          },
+          "llm_judge": {
+            "enabled": true,
+            "model": "mistral-large2"
+          },
+          "address": {
+            "enabled": true,
+            "fields": [
+              "address_line1",
+              "city",
+              "postal_code",
+              "country_code"
+            ]
+          }
+        }
+      },
+      "hierarchy": {
+        "enabled": true,
+        "parent_field": "parent_id",
+        "root_label": "Customer Accounts",
+        "type": "self",
+        "max_depth": null,
+        "max_parents": 1,
+        "allow_root": true,
+        "prevent_circular": true,
+        "change_mode": "workflow"
+      },
+      "workflow": {
+        "auto_create_on_insert": true,
+        "types": [
+          "ONBOARDING",
+          "ENRICHMENT",
+          "MERGE",
+          "DEACTIVATION",
+          "HIERARCHY_CHANGE"
+        ]
+      },
+      "fields": [
+        {
+          "name": "legal_name",
+          "label": "Legal Name",
+          "type": "text",
+          "group": "core",
+          "active": true,
+          "builtin": true,
+          "required": true,
+          "searchable": true,
+          "trigram": true,
+          "list_display": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "Raison sociale"
+          }
+        },
+        {
+          "name": "trade_name",
+          "label": "Trade Name",
+          "type": "text",
+          "group": "core",
+          "active": true,
+          "builtin": true,
+          "searchable": true,
+          "trigram": true,
+          "list_display": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "Nom commercial"
+          }
+        },
+        {
+          "name": "tax_id",
+          "label": "Tax ID",
+          "type": "text",
+          "group": "identifiers",
+          "active": true,
+          "builtin": true,
+          "unique": true,
+          "max_length": 40,
+          "labels": {
+            "fr": "N° fiscal"
+          }
+        },
+        {
+          "name": "duns_number",
+          "label": "DUNS Number",
+          "type": "text",
+          "group": "identifiers",
+          "active": true,
+          "builtin": true,
+          "max_length": 15,
+          "labels": {
+            "fr": "N° DUNS"
+          }
+        },
+        {
+          "name": "siren",
+          "label": "SIREN",
+          "type": "text",
+          "group": "identifiers",
+          "active": true,
+          "builtin": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "SIREN"
+          }
+        },
+        {
+          "name": "siret",
+          "label": "SIRET",
+          "type": "text",
+          "group": "identifiers",
+          "active": true,
+          "builtin": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "SIRET"
+          }
+        },
+        {
+          "name": "lei_code",
+          "label": "LEI Code",
+          "type": "text",
+          "group": "identifiers",
+          "active": false,
+          "builtin": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "Code LEI"
+          }
+        },
+        {
+          "name": "vat_number",
+          "label": "VAT Number",
+          "type": "text",
+          "group": "identifiers",
+          "active": false,
+          "builtin": true,
+          "max_length": 30,
+          "labels": {
+            "fr": "N° de TVA"
+          }
+        },
+        {
+          "name": "registration_number",
+          "label": "Registration No.",
+          "type": "text",
+          "group": "identifiers",
+          "active": false,
+          "builtin": true,
+          "max_length": 40,
+          "labels": {
+            "fr": "N° d'immatriculation"
+          }
+        },
+        {
+          "name": "eori_number",
+          "label": "EORI Number",
+          "type": "text",
+          "group": "identifiers",
+          "active": false,
+          "builtin": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "N° EORI"
+          }
+        },
+        {
+          "name": "global_location_number",
+          "label": "GLN",
+          "type": "text",
+          "group": "identifiers",
+          "active": false,
+          "builtin": true,
+          "max_length": 13,
+          "labels": {
+            "fr": "GLN"
+          }
+        },
+        {
+          "name": "address_line1",
+          "label": "Address",
+          "type": "text",
+          "group": "address",
+          "active": true,
+          "builtin": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "Adresse"
+          }
+        },
+        {
+          "name": "address_line2",
+          "label": "Address Line 2",
+          "type": "text",
+          "group": "address",
+          "active": true,
+          "builtin": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "Complément d'adresse"
+          }
+        },
+        {
+          "name": "address_line3",
+          "label": "Address Line 3",
+          "type": "text",
+          "group": "address",
+          "active": false,
+          "builtin": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "Complément d'adresse 2"
+          }
+        },
+        {
+          "name": "city",
+          "label": "City",
+          "type": "text",
+          "group": "address",
+          "active": true,
+          "builtin": true,
+          "list_display": true,
+          "max_length": 100,
+          "labels": {
+            "fr": "Ville"
+          }
+        },
+        {
+          "name": "state_province",
+          "label": "State/Province",
+          "type": "text",
+          "group": "address",
+          "active": true,
+          "builtin": true,
+          "max_length": 100,
+          "labels": {
+            "fr": "État / province"
+          }
+        },
+        {
+          "name": "postal_code",
+          "label": "Postal Code",
+          "type": "text",
+          "group": "address",
+          "active": true,
+          "builtin": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "Code postal"
+          }
+        },
+        {
+          "name": "country_code",
+          "label": "Country",
+          "type": "ref",
+          "group": "address",
+          "active": true,
+          "builtin": true,
+          "ref_table": "mdm.ref_country",
+          "list_display": true,
+          "filterable": true,
+          "labels": {
+            "fr": "Pays"
+          }
+        },
+        {
+          "name": "region",
+          "label": "Region",
+          "type": "text",
+          "group": "address",
+          "active": false,
+          "builtin": true,
+          "max_length": 60,
+          "labels": {
+            "fr": "Région"
+          }
+        },
+        {
+          "name": "latitude",
+          "label": "Latitude",
+          "type": "number",
+          "group": "address",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(10,7)",
+          "labels": {
+            "fr": "Latitude"
+          }
+        },
+        {
+          "name": "longitude",
+          "label": "Longitude",
+          "type": "number",
+          "group": "address",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(10,7)",
+          "labels": {
+            "fr": "Longitude"
+          }
+        },
+        {
+          "name": "phone",
+          "label": "Phone",
+          "type": "text",
+          "group": "contact",
+          "active": true,
+          "builtin": true,
+          "max_length": 40,
+          "labels": {
+            "fr": "Téléphone"
+          }
+        },
+        {
+          "name": "email",
+          "label": "Email",
+          "type": "text",
+          "group": "contact",
+          "active": true,
+          "builtin": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "E-mail"
+          }
+        },
+        {
+          "name": "website",
+          "label": "Website",
+          "type": "text",
+          "group": "contact",
+          "active": true,
+          "builtin": true,
+          "max_length": 300,
+          "labels": {
+            "fr": "Site web"
+          }
+        },
+        {
+          "name": "fax",
+          "label": "Fax",
+          "type": "text",
+          "group": "contact",
+          "active": false,
+          "builtin": true,
+          "max_length": 40,
+          "labels": {
+            "fr": "Fax"
+          }
+        },
+        {
+          "name": "linkedin_url",
+          "label": "LinkedIn URL",
+          "type": "text",
+          "group": "contact",
+          "active": false,
+          "builtin": true,
+          "max_length": 300,
+          "labels": {
+            "fr": "URL LinkedIn"
+          }
+        },
+        {
+          "name": "primary_contact_name",
+          "label": "Primary Contact",
+          "type": "text",
+          "group": "contact",
+          "active": false,
+          "builtin": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "Contact principal"
+          }
+        },
+        {
+          "name": "primary_contact_email",
+          "label": "Contact Email",
+          "type": "text",
+          "group": "contact",
+          "active": false,
+          "builtin": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "E-mail du contact"
+          }
+        },
+        {
+          "name": "primary_contact_phone",
+          "label": "Contact Phone",
+          "type": "text",
+          "group": "contact",
+          "active": false,
+          "builtin": true,
+          "max_length": 40,
+          "labels": {
+            "fr": "Téléphone du contact"
+          }
+        },
+        {
+          "name": "customer_type",
+          "label": "Type",
+          "type": "ref",
+          "group": "classification",
+          "active": true,
+          "builtin": true,
+          "ref_domain": "CUSTOMER_TYPE",
+          "filterable": true,
+          "list_display": true,
+          "labels": {
+            "fr": "Type"
+          }
+        },
+        {
+          "name": "segment",
+          "label": "Segment",
+          "type": "ref",
+          "group": "classification",
+          "active": true,
+          "builtin": true,
+          "ref_domain": "SEGMENT",
+          "filterable": true,
+          "list_display": true,
+          "labels": {
+            "fr": "Segment"
+          }
+        },
+        {
+          "name": "industry_code",
+          "label": "Industry Code",
+          "type": "text",
+          "group": "classification",
+          "active": true,
+          "builtin": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "Code d'activité"
+          }
+        },
+        {
+          "name": "nace_code",
+          "label": "NACE Code",
+          "type": "text",
+          "group": "classification",
+          "active": false,
+          "builtin": true,
+          "max_length": 10,
+          "labels": {
+            "fr": "Code NACE"
+          }
+        },
+        {
+          "name": "naics_code",
+          "label": "NAICS Code",
+          "type": "text",
+          "group": "classification",
+          "active": false,
+          "builtin": true,
+          "max_length": 10,
+          "labels": {
+            "fr": "Code NAICS"
+          }
+        },
+        {
+          "name": "sic_code",
+          "label": "SIC Code",
+          "type": "text",
+          "group": "classification",
+          "active": false,
+          "builtin": true,
+          "max_length": 10,
+          "labels": {
+            "fr": "Code SIC"
+          }
+        },
+        {
+          "name": "legal_form",
+          "label": "Legal Form",
+          "type": "text",
+          "group": "classification",
+          "active": false,
+          "builtin": true,
+          "max_length": 60,
+          "labels": {
+            "fr": "Forme juridique"
+          }
+        },
+        {
+          "name": "employee_count",
+          "label": "Employee Count",
+          "type": "number",
+          "group": "financials",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Nombre d'employés"
+          }
+        },
+        {
+          "name": "annual_revenue",
+          "label": "Annual Revenue",
+          "type": "number",
+          "group": "financials",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(15,2)",
+          "labels": {
+            "fr": "Chiffre d'affaires annuel"
+          }
+        },
+        {
+          "name": "revenue_currency",
+          "label": "Revenue Currency",
+          "type": "ref",
+          "group": "financials",
+          "active": false,
+          "builtin": true,
+          "ref_table": "mdm.ref_currency",
+          "labels": {
+            "fr": "Devise du CA"
+          }
+        },
+        {
+          "name": "credit_limit",
+          "label": "Credit Limit",
+          "type": "number",
+          "group": "financials",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(15,2)",
+          "labels": {
+            "fr": "Limite de crédit"
+          }
+        },
+        {
+          "name": "payment_terms",
+          "label": "Payment Terms",
+          "type": "text",
+          "group": "financials",
+          "active": false,
+          "builtin": true,
+          "max_length": 40,
+          "labels": {
+            "fr": "Conditions de paiement"
+          }
+        },
+        {
+          "name": "bank_account_iban",
+          "label": "IBAN",
+          "type": "text",
+          "group": "financials",
+          "active": false,
+          "builtin": true,
+          "max_length": 34,
+          "labels": {
+            "fr": "IBAN"
+          }
+        },
+        {
+          "name": "incorporation_date",
+          "label": "Incorporation Date",
+          "type": "date",
+          "group": "legal",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Date de création"
+          }
+        },
+        {
+          "name": "is_publicly_traded",
+          "label": "Publicly Traded",
+          "type": "boolean",
+          "group": "legal",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Société cotée"
+          }
+        },
+        {
+          "name": "stock_ticker",
+          "label": "Stock Ticker",
+          "type": "text",
+          "group": "legal",
+          "active": false,
+          "builtin": true,
+          "max_length": 10,
+          "labels": {
+            "fr": "Code boursier"
+          }
+        },
+        {
+          "name": "gdpr_consent",
+          "label": "GDPR Consent",
+          "type": "boolean",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Consentement RGPD"
+          }
+        },
+        {
+          "name": "sanctions_checked",
+          "label": "Sanctions Checked",
+          "type": "boolean",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Sanctions vérifiées"
+          }
+        },
+        {
+          "name": "sanctions_check_date",
+          "label": "Sanctions Check Date",
+          "type": "date",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Date de vérification des sanctions"
+          }
+        },
+        {
+          "name": "kyc_status",
+          "label": "KYC Status",
+          "type": "text",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "max_length": 30,
+          "labels": {
+            "fr": "Statut KYC"
+          }
+        },
+        {
+          "name": "risk_rating",
+          "label": "Risk Rating",
+          "type": "text",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "Niveau de risque"
+          }
+        },
+        {
+          "name": "parent_id",
+          "label": "Parent",
+          "type": "uuid",
+          "group": "hierarchy",
+          "active": true,
+          "builtin": true,
+          "labels": {
+            "fr": "Parent"
+          }
+        }
+      ],
+      "labels": {
+        "fr": "Clients"
+      },
+      "singular_labels": {
+        "fr": "Client"
+      }
+    },
+    {
+      "id": "product",
+      "label": "Products",
+      "singular": "Product",
+      "icon": "Inventory2",
+      "table": "mdm.product",
+      "enabled": true,
+      "allow_create": true,
+      "order": 2,
+      "name_field": "name",
+      "country_scoped": false,
+      "search": {
+        "fields": [
+          "name",
+          "sku",
+          "ean"
+        ]
+      },
+      "filters": [
+        {
+          "field": "lifecycle_stage",
+          "label": "Stage",
+          "type": "select",
+          "options_from": "distinct"
+        },
+        {
+          "field": "category_id",
+          "label": "Category",
+          "type": "select",
+          "options_from": "distinct"
+        },
+        {
+          "field": "brand",
+          "label": "Brand",
+          "type": "select",
+          "options_from": "distinct"
+        }
+      ],
+      "matching": {
+        "enabled": true,
+        "fields": [
+          "name",
+          "sku",
+          "ean",
+          "brand"
+        ],
+        "methods": {
+          "exact_keys": {
+            "enabled": true,
+            "keys": [
+              "ean",
+              "sku"
+            ]
+          },
+          "fuzzy": {
+            "enabled": true,
+            "threshold": 0.4,
+            "name_field": "name"
+          },
+          "phonetic": {
+            "enabled": true,
+            "fields": [
+              "name",
+              "brand"
+            ]
+          },
+          "composite": {
+            "enabled": true,
+            "threshold": 60,
+            "rules": [
+              {
+                "field": "name",
+                "weight": 0.4,
+                "compare": "trigram",
+                "min_sim": 0.3
+              },
+              {
+                "field": "sku",
+                "weight": 0.25,
+                "compare": "trigram",
+                "min_sim": 0.5
+              },
+              {
+                "field": "ean",
+                "weight": 0.2,
+                "compare": "exact"
+              },
+              {
+                "field": "brand",
+                "weight": 0.15,
+                "compare": "exact"
+              }
+            ]
+          },
+          "embedding": {
+            "enabled": true,
+            "model": "e5-base-v2",
+            "threshold": 0.85,
+            "description_fields": [
+              "name",
+              "brand",
+              "manufacturer",
+              "sku"
+            ]
+          },
+          "llm_judge": {
+            "enabled": true,
+            "model": "mistral-large2"
+          },
+          "address": {
+            "enabled": false,
+            "allow_create": false,
+            "fields": []
+          }
+        }
+      },
+      "hierarchy": {
+        "enabled": true,
+        "parent_field": "category_id",
+        "root_label": "Product Catalog",
+        "type": "category",
+        "category_table": "mdm.product_category"
+      },
+      "workflow": {
+        "auto_create_on_insert": true,
+        "types": [
+          "ONBOARDING",
+          "ENRICHMENT",
+          "MERGE",
+          "DEACTIVATION",
+          "HIERARCHY_CHANGE"
+        ]
+      },
+      "joins": [
+        {
+          "alias": "c",
+          "table": "mdm.product_category",
+          "on": "c.id = {table}.category_id",
+          "columns": {
+            "category_name": "c.name",
+            "category_code": "c.code"
+          }
+        }
+      ],
+      "fields": [
+        {
+          "name": "sku",
+          "label": "SKU",
+          "type": "text",
+          "group": "core",
+          "active": true,
+          "builtin": true,
+          "searchable": true,
+          "list_display": true,
+          "max_length": 60,
+          "labels": {
+            "fr": "Référence (SKU)"
+          }
+        },
+        {
+          "name": "ean",
+          "label": "EAN / GTIN-13",
+          "type": "text",
+          "group": "core",
+          "active": true,
+          "builtin": true,
+          "searchable": true,
+          "list_display": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "EAN / GTIN-13"
+          }
+        },
+        {
+          "name": "upc",
+          "label": "UPC / GTIN-12",
+          "type": "text",
+          "group": "core",
+          "active": false,
+          "builtin": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "UPC / GTIN-12"
+          }
+        },
+        {
+          "name": "gtin14",
+          "label": "GTIN-14",
+          "type": "text",
+          "group": "core",
+          "active": false,
+          "builtin": true,
+          "max_length": 14,
+          "labels": {
+            "fr": "GTIN-14"
+          }
+        },
+        {
+          "name": "isbn",
+          "label": "ISBN",
+          "type": "text",
+          "group": "core",
+          "active": false,
+          "builtin": true,
+          "max_length": 17,
+          "labels": {
+            "fr": "ISBN"
+          }
+        },
+        {
+          "name": "mpn",
+          "label": "MPN",
+          "type": "text",
+          "group": "core",
+          "active": false,
+          "builtin": true,
+          "max_length": 60,
+          "labels": {
+            "fr": "MPN"
+          }
+        },
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "group": "core",
+          "active": true,
+          "builtin": true,
+          "required": true,
+          "searchable": true,
+          "trigram": true,
+          "list_display": true,
+          "max_length": 300,
+          "labels": {
+            "fr": "Nom"
+          }
+        },
+        {
+          "name": "short_desc",
+          "label": "Short Description",
+          "type": "text",
+          "group": "core",
+          "active": true,
+          "builtin": true,
+          "max_length": 500,
+          "labels": {
+            "fr": "Description courte"
+          }
+        },
+        {
+          "name": "long_desc",
+          "label": "Long Description",
+          "type": "text",
+          "group": "core",
+          "active": false,
+          "builtin": true,
+          "pg_type": "TEXT",
+          "labels": {
+            "fr": "Description longue"
+          }
+        },
+        {
+          "name": "brand",
+          "label": "Brand",
+          "type": "text",
+          "group": "core",
+          "active": true,
+          "builtin": true,
+          "filterable": true,
+          "list_display": true,
+          "trigram": true,
+          "max_length": 120,
+          "labels": {
+            "fr": "Marque"
+          }
+        },
+        {
+          "name": "manufacturer",
+          "label": "Manufacturer",
+          "type": "text",
+          "group": "core",
+          "active": true,
+          "builtin": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "Fabricant"
+          }
+        },
+        {
+          "name": "manufacturer_part_number",
+          "label": "Mfr Part No.",
+          "type": "text",
+          "group": "core",
+          "active": false,
+          "builtin": true,
+          "max_length": 60,
+          "labels": {
+            "fr": "Réf. fabricant"
+          }
+        },
+        {
+          "name": "category_id",
+          "label": "Category",
+          "type": "number",
+          "group": "classification",
+          "active": true,
+          "builtin": true,
+          "filterable": true,
+          "labels": {
+            "fr": "Catégorie"
+          }
+        },
+        {
+          "name": "product_type",
+          "label": "Product Type",
+          "type": "ref",
+          "group": "classification",
+          "active": true,
+          "builtin": true,
+          "ref_domain": "PRODUCT_TYPE",
+          "labels": {
+            "fr": "Type de produit"
+          }
+        },
+        {
+          "name": "unit_of_measure",
+          "label": "UoM",
+          "type": "ref",
+          "group": "classification",
+          "active": true,
+          "builtin": true,
+          "ref_domain": "UNIT_OF_MEASURE",
+          "labels": {
+            "fr": "Unité"
+          }
+        },
+        {
+          "name": "product_group",
+          "label": "Product Group",
+          "type": "text",
+          "group": "classification",
+          "active": false,
+          "builtin": true,
+          "max_length": 60,
+          "labels": {
+            "fr": "Groupe de produits"
+          }
+        },
+        {
+          "name": "commodity_code",
+          "label": "Commodity Code",
+          "type": "text",
+          "group": "classification",
+          "active": false,
+          "builtin": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "Code marchandise"
+          }
+        },
+        {
+          "name": "customs_tariff",
+          "label": "HS / Customs Tariff",
+          "type": "text",
+          "group": "classification",
+          "active": false,
+          "builtin": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "Code SH / tarif douanier"
+          }
+        },
+        {
+          "name": "unspsc_code",
+          "label": "UNSPSC Code",
+          "type": "text",
+          "group": "classification",
+          "active": false,
+          "builtin": true,
+          "max_length": 16,
+          "labels": {
+            "fr": "Code UNSPSC"
+          }
+        },
+        {
+          "name": "weight_kg",
+          "label": "Weight (kg)",
+          "type": "number",
+          "group": "dimensions",
+          "active": true,
+          "builtin": true,
+          "pg_type": "NUMERIC(10,3)",
+          "labels": {
+            "fr": "Poids (kg)"
+          }
+        },
+        {
+          "name": "weight_gross_kg",
+          "label": "Gross Weight (kg)",
+          "type": "number",
+          "group": "dimensions",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(10,3)",
+          "labels": {
+            "fr": "Poids brut (kg)"
+          }
+        },
+        {
+          "name": "length_cm",
+          "label": "Length (cm)",
+          "type": "number",
+          "group": "dimensions",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(10,2)",
+          "labels": {
+            "fr": "Longueur (cm)"
+          }
+        },
+        {
+          "name": "width_cm",
+          "label": "Width (cm)",
+          "type": "number",
+          "group": "dimensions",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(10,2)",
+          "labels": {
+            "fr": "Largeur (cm)"
+          }
+        },
+        {
+          "name": "height_cm",
+          "label": "Height (cm)",
+          "type": "number",
+          "group": "dimensions",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(10,2)",
+          "labels": {
+            "fr": "Hauteur (cm)"
+          }
+        },
+        {
+          "name": "volume_cm3",
+          "label": "Volume (cm³)",
+          "type": "number",
+          "group": "dimensions",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(12,2)",
+          "labels": {
+            "fr": "Volume (cm³)"
+          }
+        },
+        {
+          "name": "pack_quantity",
+          "label": "Pack Quantity",
+          "type": "number",
+          "group": "dimensions",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Quantité par colis"
+          }
+        },
+        {
+          "name": "pallet_quantity",
+          "label": "Pallet Quantity",
+          "type": "number",
+          "group": "dimensions",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Quantité par palette"
+          }
+        },
+        {
+          "name": "list_price",
+          "label": "List Price",
+          "type": "number",
+          "group": "pricing",
+          "active": true,
+          "builtin": true,
+          "list_display": true,
+          "pg_type": "NUMERIC(12,4)",
+          "labels": {
+            "fr": "Prix catalogue"
+          }
+        },
+        {
+          "name": "cost_price",
+          "label": "Cost Price",
+          "type": "number",
+          "group": "pricing",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(12,4)",
+          "labels": {
+            "fr": "Prix de revient"
+          }
+        },
+        {
+          "name": "msrp",
+          "label": "MSRP",
+          "type": "number",
+          "group": "pricing",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(12,4)",
+          "labels": {
+            "fr": "Prix public conseillé"
+          }
+        },
+        {
+          "name": "currency_code",
+          "label": "Currency",
+          "type": "ref",
+          "group": "pricing",
+          "active": true,
+          "builtin": true,
+          "ref_table": "mdm.ref_currency",
+          "labels": {
+            "fr": "Devise"
+          }
+        },
+        {
+          "name": "min_order_qty",
+          "label": "Min Order Qty",
+          "type": "number",
+          "group": "pricing",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Qté minimale de commande"
+          }
+        },
+        {
+          "name": "country_of_origin",
+          "label": "Country of Origin",
+          "type": "ref",
+          "group": "logistics",
+          "active": false,
+          "builtin": true,
+          "ref_table": "mdm.ref_country",
+          "labels": {
+            "fr": "Pays d'origine"
+          }
+        },
+        {
+          "name": "country_code",
+          "label": "Market Country",
+          "type": "ref",
+          "group": "logistics",
+          "active": true,
+          "builtin": true,
+          "ref_table": "mdm.ref_country",
+          "list_display": true,
+          "filterable": true,
+          "labels": {
+            "fr": "Pays de commercialisation"
+          }
+        },
+        {
+          "name": "shelf_life_days",
+          "label": "Shelf Life (days)",
+          "type": "number",
+          "group": "logistics",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Durée de conservation (jours)"
+          }
+        },
+        {
+          "name": "storage_conditions",
+          "label": "Storage Conditions",
+          "type": "text",
+          "group": "logistics",
+          "active": false,
+          "builtin": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "Conditions de stockage"
+          }
+        },
+        {
+          "name": "is_returnable",
+          "label": "Returnable",
+          "type": "boolean",
+          "group": "logistics",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Retournable"
+          }
+        },
+        {
+          "name": "lead_time_days",
+          "label": "Lead Time (days)",
+          "type": "number",
+          "group": "logistics",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Délai d'approvisionnement (jours)"
+          }
+        },
+        {
+          "name": "hazardous",
+          "label": "Hazardous",
+          "type": "boolean",
+          "group": "compliance",
+          "active": true,
+          "builtin": true,
+          "labels": {
+            "fr": "Dangereux"
+          }
+        },
+        {
+          "name": "esg_rating",
+          "label": "ESG Rating",
+          "type": "ref",
+          "group": "compliance",
+          "active": true,
+          "builtin": true,
+          "ref_domain": "ESG_RATING",
+          "labels": {
+            "fr": "Notation ESG"
+          }
+        },
+        {
+          "name": "reach_compliant",
+          "label": "REACH Compliant",
+          "type": "boolean",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Conforme REACH"
+          }
+        },
+        {
+          "name": "rohs_compliant",
+          "label": "RoHS Compliant",
+          "type": "boolean",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Conforme RoHS"
+          }
+        },
+        {
+          "name": "fsc_certified",
+          "label": "FSC Certified",
+          "type": "boolean",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Certifié FSC"
+          }
+        },
+        {
+          "name": "carbon_footprint_kg",
+          "label": "Carbon Footprint (kg CO₂)",
+          "type": "number",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(10,3)",
+          "labels": {
+            "fr": "Empreinte carbone (kg CO₂)"
+          }
+        },
+        {
+          "name": "recycled_content_pct",
+          "label": "Recycled Content (%)",
+          "type": "number",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Contenu recyclé (%)"
+          }
+        },
+        {
+          "name": "image_url",
+          "label": "Image URL",
+          "type": "text",
+          "group": "media",
+          "active": false,
+          "builtin": true,
+          "max_length": 500,
+          "editable": false,
+          "labels": {
+            "fr": "URL de l'image"
+          }
+        },
+        {
+          "name": "datasheet_url",
+          "label": "Datasheet URL",
+          "type": "text",
+          "group": "media",
+          "active": false,
+          "builtin": true,
+          "max_length": 500,
+          "labels": {
+            "fr": "URL de la fiche technique"
+          }
+        },
+        {
+          "name": "is_discontinued",
+          "label": "Discontinued",
+          "type": "boolean",
+          "group": "lifecycle",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Arrêté"
+          }
+        },
+        {
+          "name": "launch_date",
+          "label": "Launch Date",
+          "type": "date",
+          "group": "lifecycle",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Date de lancement"
+          }
+        },
+        {
+          "name": "end_of_life_date",
+          "label": "End of Life Date",
+          "type": "date",
+          "group": "lifecycle",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Date de fin de vie"
+          }
+        }
+      ],
+      "labels": {
+        "fr": "Produits"
+      },
+      "singular_labels": {
+        "fr": "Produit"
+      },
+      "country_null_all": true
+    },
+    {
+      "id": "supplier",
+      "label": "Suppliers",
+      "singular": "Supplier",
+      "icon": "LocalShipping",
+      "table": "mdm.supplier",
+      "enabled": false,
+      "order": 3,
+      "name_field": "company_name",
+      "country_scoped": true,
+      "search": {
+        "fields": [
+          "company_name",
+          "tax_id"
+        ]
+      },
+      "filters": [
+        {
+          "field": "lifecycle_stage",
+          "label": "Stage",
+          "type": "select",
+          "options_from": "distinct"
+        },
+        {
+          "field": "country_code",
+          "label": "Country",
+          "type": "select",
+          "options_from": "distinct"
+        },
+        {
+          "field": "supplier_type",
+          "label": "Type",
+          "type": "select",
+          "options_from": "SUPPLIER_TYPE"
+        }
+      ],
+      "matching": {
+        "enabled": true,
+        "fields": [
+          "company_name",
+          "tax_id",
+          "city"
+        ],
+        "methods": {
+          "exact_keys": {
+            "enabled": true,
+            "keys": [
+              "tax_id",
+              "duns_number"
+            ]
+          },
+          "fuzzy": {
+            "enabled": true,
+            "threshold": 0.4,
+            "name_field": "company_name"
+          },
+          "phonetic": {
+            "enabled": true,
+            "fields": [
+              "company_name",
+              "city"
+            ]
+          },
+          "composite": {
+            "enabled": true,
+            "threshold": 60,
+            "rules": [
+              {
+                "field": "legal_name",
+                "weight": 0.4,
+                "compare": "trigram",
+                "min_sim": 0.3
+              },
+              {
+                "field": "tax_id",
+                "weight": 0.3,
+                "compare": "exact"
+              },
+              {
+                "field": "city",
+                "weight": 0.15,
+                "compare": "trigram",
+                "min_sim": 0.5
+              },
+              {
+                "field": "payment_terms",
+                "weight": 0.075,
+                "compare": "exact"
+              },
+              {
+                "field": "supplier_type",
+                "weight": 0.075,
+                "compare": "exact"
+              }
+            ]
+          },
+          "embedding": {
+            "enabled": true,
+            "model": "e5-base-v2",
+            "threshold": 0.85,
+            "description_fields": [
+              "company_name",
+              "city",
+              "country_code"
+            ]
+          },
+          "llm_judge": {
+            "enabled": true,
+            "model": "mistral-large2"
+          },
+          "address": {
+            "enabled": true,
+            "fields": [
+              "address_line1",
+              "city",
+              "postal_code",
+              "country_code"
+            ]
+          }
+        }
+      },
+      "workflow": {
+        "auto_create_on_insert": true,
+        "types": [
+          "ONBOARDING",
+          "ENRICHMENT",
+          "DEACTIVATION"
+        ]
+      },
+      "fields": [
+        {
+          "name": "company_name",
+          "label": "Company Name",
+          "type": "text",
+          "group": "core",
+          "active": true,
+          "builtin": true,
+          "required": true,
+          "searchable": true,
+          "trigram": true,
+          "list_display": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "Raison sociale"
+          }
+        },
+        {
+          "name": "trade_name",
+          "label": "Trade Name",
+          "type": "text",
+          "group": "core",
+          "active": false,
+          "builtin": true,
+          "trigram": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "Nom commercial"
+          }
+        },
+        {
+          "name": "tax_id",
+          "label": "Tax ID",
+          "type": "text",
+          "group": "identifiers",
+          "active": true,
+          "builtin": true,
+          "unique": true,
+          "max_length": 40,
+          "labels": {
+            "fr": "N° fiscal"
+          }
+        },
+        {
+          "name": "vat_number",
+          "label": "VAT Number",
+          "type": "text",
+          "group": "identifiers",
+          "active": false,
+          "builtin": true,
+          "max_length": 30,
+          "labels": {
+            "fr": "N° de TVA"
+          }
+        },
+        {
+          "name": "duns_number",
+          "label": "DUNS Number",
+          "type": "text",
+          "group": "identifiers",
+          "active": false,
+          "builtin": true,
+          "max_length": 15,
+          "labels": {
+            "fr": "N° DUNS"
+          }
+        },
+        {
+          "name": "siren",
+          "label": "SIREN",
+          "type": "text",
+          "group": "identifiers",
+          "active": false,
+          "builtin": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "SIREN"
+          }
+        },
+        {
+          "name": "global_location_number",
+          "label": "GLN",
+          "type": "text",
+          "group": "identifiers",
+          "active": false,
+          "builtin": true,
+          "max_length": 13,
+          "labels": {
+            "fr": "GLN"
+          }
+        },
+        {
+          "name": "address_line1",
+          "label": "Address",
+          "type": "text",
+          "group": "address",
+          "active": true,
+          "builtin": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "Adresse"
+          }
+        },
+        {
+          "name": "address_line2",
+          "label": "Address Line 2",
+          "type": "text",
+          "group": "address",
+          "active": false,
+          "builtin": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "Complément d'adresse"
+          }
+        },
+        {
+          "name": "city",
+          "label": "City",
+          "type": "text",
+          "group": "address",
+          "active": true,
+          "builtin": true,
+          "list_display": true,
+          "max_length": 100,
+          "labels": {
+            "fr": "Ville"
+          }
+        },
+        {
+          "name": "state_province",
+          "label": "State/Province",
+          "type": "text",
+          "group": "address",
+          "active": false,
+          "builtin": true,
+          "max_length": 100,
+          "labels": {
+            "fr": "État / province"
+          }
+        },
+        {
+          "name": "postal_code",
+          "label": "Postal Code",
+          "type": "text",
+          "group": "address",
+          "active": false,
+          "builtin": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "Code postal"
+          }
+        },
+        {
+          "name": "country_code",
+          "label": "Country",
+          "type": "ref",
+          "group": "address",
+          "active": true,
+          "builtin": true,
+          "ref_table": "mdm.ref_country",
+          "list_display": true,
+          "labels": {
+            "fr": "Pays"
+          }
+        },
+        {
+          "name": "latitude",
+          "label": "Latitude",
+          "type": "number",
+          "group": "address",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(10,7)",
+          "labels": {
+            "fr": "Latitude"
+          }
+        },
+        {
+          "name": "longitude",
+          "label": "Longitude",
+          "type": "number",
+          "group": "address",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(10,7)",
+          "labels": {
+            "fr": "Longitude"
+          }
+        },
+        {
+          "name": "phone",
+          "label": "Phone",
+          "type": "text",
+          "group": "contact",
+          "active": true,
+          "builtin": true,
+          "max_length": 40,
+          "labels": {
+            "fr": "Téléphone"
+          }
+        },
+        {
+          "name": "email",
+          "label": "Email",
+          "type": "text",
+          "group": "contact",
+          "active": true,
+          "builtin": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "E-mail"
+          }
+        },
+        {
+          "name": "website",
+          "label": "Website",
+          "type": "text",
+          "group": "contact",
+          "active": false,
+          "builtin": true,
+          "max_length": 300,
+          "labels": {
+            "fr": "Site web"
+          }
+        },
+        {
+          "name": "primary_contact_name",
+          "label": "Primary Contact",
+          "type": "text",
+          "group": "contact",
+          "active": false,
+          "builtin": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "Contact principal"
+          }
+        },
+        {
+          "name": "primary_contact_email",
+          "label": "Contact Email",
+          "type": "text",
+          "group": "contact",
+          "active": false,
+          "builtin": true,
+          "max_length": 200,
+          "labels": {
+            "fr": "E-mail du contact"
+          }
+        },
+        {
+          "name": "supplier_type",
+          "label": "Supplier Type",
+          "type": "ref",
+          "group": "classification",
+          "active": true,
+          "builtin": true,
+          "ref_domain": "SUPPLIER_TYPE",
+          "filterable": true,
+          "list_display": true,
+          "labels": {
+            "fr": "Type de fournisseur"
+          }
+        },
+        {
+          "name": "supplier_tier",
+          "label": "Supplier Tier",
+          "type": "text",
+          "group": "classification",
+          "active": false,
+          "builtin": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "Rang fournisseur"
+          }
+        },
+        {
+          "name": "industry_code",
+          "label": "Industry Code",
+          "type": "text",
+          "group": "classification",
+          "active": false,
+          "builtin": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "Code d'activité"
+          }
+        },
+        {
+          "name": "nace_code",
+          "label": "NACE Code",
+          "type": "text",
+          "group": "classification",
+          "active": false,
+          "builtin": true,
+          "max_length": 10,
+          "labels": {
+            "fr": "Code NACE"
+          }
+        },
+        {
+          "name": "payment_terms",
+          "label": "Payment Terms",
+          "type": "text",
+          "group": "commercial",
+          "active": true,
+          "builtin": true,
+          "max_length": 40,
+          "labels": {
+            "fr": "Conditions de paiement"
+          }
+        },
+        {
+          "name": "lead_time_days",
+          "label": "Lead Time (days)",
+          "type": "number",
+          "group": "commercial",
+          "active": true,
+          "builtin": true,
+          "labels": {
+            "fr": "Délai d'approvisionnement (jours)"
+          }
+        },
+        {
+          "name": "incoterms",
+          "label": "Incoterms",
+          "type": "text",
+          "group": "commercial",
+          "active": false,
+          "builtin": true,
+          "max_length": 10,
+          "labels": {
+            "fr": "Incoterms"
+          }
+        },
+        {
+          "name": "currency_code",
+          "label": "Currency",
+          "type": "ref",
+          "group": "commercial",
+          "active": false,
+          "builtin": true,
+          "ref_table": "mdm.ref_currency",
+          "labels": {
+            "fr": "Devise"
+          }
+        },
+        {
+          "name": "min_order_value",
+          "label": "Min Order Value",
+          "type": "number",
+          "group": "commercial",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(12,2)",
+          "labels": {
+            "fr": "Montant minimal de commande"
+          }
+        },
+        {
+          "name": "annual_spend",
+          "label": "Annual Spend",
+          "type": "number",
+          "group": "commercial",
+          "active": false,
+          "builtin": true,
+          "pg_type": "NUMERIC(15,2)",
+          "labels": {
+            "fr": "Dépense annuelle"
+          }
+        },
+        {
+          "name": "bank_account_iban",
+          "label": "IBAN",
+          "type": "text",
+          "group": "financial",
+          "active": false,
+          "builtin": true,
+          "max_length": 34,
+          "labels": {
+            "fr": "IBAN"
+          }
+        },
+        {
+          "name": "bank_name",
+          "label": "Bank Name",
+          "type": "text",
+          "group": "financial",
+          "active": false,
+          "builtin": true,
+          "max_length": 120,
+          "labels": {
+            "fr": "Banque"
+          }
+        },
+        {
+          "name": "bank_swift_bic",
+          "label": "SWIFT/BIC",
+          "type": "text",
+          "group": "financial",
+          "active": false,
+          "builtin": true,
+          "max_length": 11,
+          "labels": {
+            "fr": "SWIFT / BIC"
+          }
+        },
+        {
+          "name": "iso9001_certified",
+          "label": "ISO 9001",
+          "type": "boolean",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "ISO 9001"
+          }
+        },
+        {
+          "name": "iso14001_certified",
+          "label": "ISO 14001",
+          "type": "boolean",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "ISO 14001"
+          }
+        },
+        {
+          "name": "iso45001_certified",
+          "label": "ISO 45001",
+          "type": "boolean",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "ISO 45001"
+          }
+        },
+        {
+          "name": "ecovadis_score",
+          "label": "EcoVadis Score",
+          "type": "number",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Score EcoVadis"
+          }
+        },
+        {
+          "name": "risk_rating",
+          "label": "Risk Rating",
+          "type": "text",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "max_length": 20,
+          "labels": {
+            "fr": "Niveau de risque"
+          }
+        },
+        {
+          "name": "sanctions_checked",
+          "label": "Sanctions Checked",
+          "type": "boolean",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Sanctions vérifiées"
+          }
+        },
+        {
+          "name": "last_audit_date",
+          "label": "Last Audit Date",
+          "type": "date",
+          "group": "compliance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Date du dernier audit"
+          }
+        },
+        {
+          "name": "contract_start_date",
+          "label": "Contract Start",
+          "type": "date",
+          "group": "contract",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Début de contrat"
+          }
+        },
+        {
+          "name": "contract_end_date",
+          "label": "Contract End",
+          "type": "date",
+          "group": "contract",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Fin de contrat"
+          }
+        },
+        {
+          "name": "contract_reference",
+          "label": "Contract Ref.",
+          "type": "text",
+          "group": "contract",
+          "active": false,
+          "builtin": true,
+          "max_length": 60,
+          "labels": {
+            "fr": "Réf. contrat"
+          }
+        },
+        {
+          "name": "performance_score",
+          "label": "Performance Score",
+          "type": "number",
+          "group": "performance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Score de performance"
+          }
+        },
+        {
+          "name": "on_time_delivery_pct",
+          "label": "On-Time Delivery (%)",
+          "type": "number",
+          "group": "performance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Livraison à temps (%)"
+          }
+        },
+        {
+          "name": "defect_rate_pct",
+          "label": "Defect Rate (%)",
+          "type": "number",
+          "group": "performance",
+          "active": false,
+          "builtin": true,
+          "labels": {
+            "fr": "Taux de défaut (%)"
+          }
+        }
+      ],
+      "labels": {
+        "fr": "Fournisseurs"
+      },
+      "singular_labels": {
+        "fr": "Fournisseur"
+      }
+    }
+  ],
+  "defaultCurrency": "EUR"
+}

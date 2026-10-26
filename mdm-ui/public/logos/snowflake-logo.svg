@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="none">
+  <!-- Snowflake-style logo -->
+  <!-- Central snowflake icon -->
+  <g transform="translate(30, 30)">
+    <!-- Vertical line -->
+    <line x1="0" y1="-16" x2="0" y2="16" stroke="#29B5E8" stroke-width="3" stroke-linecap="round"/>
+    <!-- 60° lines -->
+    <line x1="-13.86" y1="-8" x2="13.86" y2="8" stroke="#29B5E8" stroke-width="3" stroke-linecap="round"/>
+    <line x1="-13.86" y1="8" x2="13.86" y2="-8" stroke="#29B5E8" stroke-width="3" stroke-linecap="round"/>
+    <!-- Top branches -->
+    <line x1="0" y1="-16" x2="-5" y2="-11" stroke="#29B5E8" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="0" y1="-16" x2="5" y2="-11" stroke="#29B5E8" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Bottom branches -->
+    <line x1="0" y1="16" x2="-5" y2="11" stroke="#29B5E8" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="0" y1="16" x2="5" y2="11" stroke="#29B5E8" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Right-top branches -->
+    <line x1="13.86" y1="-8" x2="8.86" y2="-8" stroke="#29B5E8" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="13.86" y1="-8" x2="11.36" y2="-3" stroke="#29B5E8" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Left-bottom branches -->
+    <line x1="-13.86" y1="8" x2="-8.86" y2="8" stroke="#29B5E8" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="-13.86" y1="8" x2="-11.36" y2="3" stroke="#29B5E8" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Right-bottom branches -->
+    <line x1="13.86" y1="8" x2="8.86" y2="8" stroke="#29B5E8" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="13.86" y1="8" x2="11.36" y2="3" stroke="#29B5E8" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Left-top branches -->
+    <line x1="-13.86" y1="-8" x2="-8.86" y2="-8" stroke="#29B5E8" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="-13.86" y1="-8" x2="-11.36" y2="-3" stroke="#29B5E8" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <!-- MDM text -->
+  <text x="58" y="35" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="700" font-size="26" fill="#29B5E8" letter-spacing="3">MDM</text>
+  <!-- Subtitle -->
+  <text x="59" y="48" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="400" font-size="9" fill="#56C8EF" letter-spacing="2">MASTER DATA</text>
+</svg>

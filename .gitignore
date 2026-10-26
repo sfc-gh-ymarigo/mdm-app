@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Build output
+dist/
+build/
+.vite/
+
+# Environment & secrets
+.env
+.env.local*
+.env.*.local
+mdm-api/.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temp scripts
+*.tmp
+/tmp/
+
+# One-off utility scripts (may contain local credentials)
+postgres/*.cjs
+mdm-api/approve
+mdm-api/check
+
+# Customer-specific demo data (keep only neutral/template)
+DEMO_SCRIPT.md
+
+# OS
+Thumbs.db

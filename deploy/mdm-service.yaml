@@ -1,0 +1,58 @@
+# Snowpark Container Services spec for the MDM (API + UI in one container).
+# ${VAR} placeholders are filled in by deploy/deploy.sh.
+spec:
+  containers:
+    - name: mdm
+      image: ${IMAGE}
+      env:
+        PORT: "8080"
+        BIND_HOST: "0.0.0.0"
+        NODE_ENV: production
+        # Identity comes from the Sf-Context-Current-User ingress header (auth mode "spcs").
+        MDM_AUTH_MODE: spcs
+        # Apply pending postgres/NNN_*.sql migrations at startup (advisory-locked, safe with >1 instance)
+        MDM_AUTO_MIGRATE: "1"
+        DEMO_CUSTOMER: ${DEMO_CUSTOMER}
+        PG_HOST: ${PG_HOST}
+        PG_PORT: "5432"
+        PG_DATABASE: postgres
+        MDM_DATABASE: ${MDM_DATABASE}
+        MDM_WAREHOUSE: ${MDM_WAREHOUSE}
+        MDM_MIRROR_DATABASE: ${MDM_MIRROR_DATABASE}
+        MDM_MIRROR_NAME: ${MDM_MIRROR_NAME}
+        MDM_PG_INSTANCE: ${MDM_PG_INSTANCE}
+      secrets:
+        - snowflakeSecret:
+            objectName: ${MDM_DATABASE}.MDM_APP.MDM_PG_ADMIN
+          secretKeyRef: username
+          envVarName: PG_USER
+        - snowflakeSecret:
+            objectName: ${MDM_DATABASE}.MDM_APP.MDM_PG_ADMIN
+          secretKeyRef: password
+          envVarName: PG_PASSWORD
+        - snowflakeSecret:
+            objectName: ${MDM_DATABASE}.MDM_APP.MDM_PG_APP
+          secretKeyRef: username
+          envVarName: PG_APP_USER
+        - snowflakeSecret:
+            objectName: ${MDM_DATABASE}.MDM_APP.MDM_PG_APP
+          secretKeyRef: password
+          envVarName: PG_APP_PASSWORD
+      readinessProbe:
+        port: 8080
+        path: /api/health
+      resources:
+        requests:
+          memory: 1G
+          cpu: 0.5
+        limits:
+          memory: 2G
+          cpu: 1
+  endpoints:
+    - name: app
+      port: 8080
+      public: true
+serviceRoles:
+  - name: mdm_user
+    endpoints:
+      - app

@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mdm-api
+    services:
+      postgres:
+        image: postgres:16   # ships pg_trgm, fuzzystrmatch, ltree, uuid-ossp
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      PG_HOST: localhost
+      PG_PORT: '5432'
+      PG_USER: postgres
+      PG_PASSWORD: postgres
+      PG_DATABASE: postgres
+      PG_TEST_DATABASE: mdm_ci
+      PG_APP_USER: mdm_app
+      PG_APP_PASSWORD: mdm_app_ci
+      MDM_TEST_SET_APP_PASSWORD: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: mdm-api/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - name: Create test database
+        run: PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE DATABASE mdm_ci"
+      - run: npm test
+
+  ui:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mdm-ui
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: mdm-ui/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run check:i18n
+      - run: npm test
+      - run: npm run build
