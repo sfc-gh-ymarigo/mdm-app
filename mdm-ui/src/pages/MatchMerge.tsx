@@ -188,13 +188,13 @@ export default function MatchMerge() {
         // Exact-match keys from every enabled module's matching config
         const exactKeys = [...new Set(modules.flatMap(m => m.matching?.methods?.exact_keys?.enabled ? m.matching.methods.exact_keys.keys : []))].join(', ');
         const PIPELINE_METHODS = [
-          { key: 'exact_keys', label: tr('matchMerge.exactKeys'), desc: tr('matchMerge.exactKeysDesc', { keys: exactKeys || tr('matchMerge.configuredKeys') }), color: statusColors().success, icon: VpnKeyIcon, endpoint: 'scan' as const },
-          { key: 'fuzzy', label: tr('matchMerge.fuzzyTrigram'), desc: tr('matchMerge.pgTrgmNameSimilarity'), color: statusColors().success, icon: TextFieldsIcon, endpoint: 'scan' as const },
-          { key: 'phonetic', label: tr('matchMerge.phonetic'), desc: tr('matchMerge.doubleMetaphoneSoundMatching'), color: seriesColor(5), icon: RecordVoiceOverIcon, endpoint: 'scan' as const },
-          { key: 'composite', label: tr('matchMerge.compositeRules'), desc: tr('matchMerge.weightedMultiFieldScoring'), color: statusColors().warning, icon: TuneIcon, endpoint: 'scan' as const },
-          { key: 'address', label: tr('matchMerge.addressLlm'), desc: tr('matchMerge.cortexNormalizedAddressComparison'), color: statusColors().info, icon: PlaceIcon, endpoint: 'scan' as const },
-          { key: 'embedding', label: tr('matchMerge.embedding'), desc: tr('matchMerge.cortexEmbedText768Cosine'), color: statusColors().info, icon: HubIcon, endpoint: 'enrich' as const },
-          { key: 'llm_judge', label: tr('matchMerge.llmJudge'), desc: tr('matchMerge.cortexCompleteReasoningVerdict'), color: seriesColor(1), icon: PsychologyIcon, endpoint: 'enrich' as const },
+          { key: 'exact_keys', label: tr('matchMerge.exactKeys'), desc: tr('matchMerge.exactKeysDesc', { keys: exactKeys || tr('matchMerge.configuredKeys') }), color: methodColor("EXACT_KEY"), icon: VpnKeyIcon, endpoint: 'scan' as const },
+          { key: 'fuzzy', label: tr('matchMerge.fuzzyTrigram'), desc: tr('matchMerge.pgTrgmNameSimilarity'), color: methodColor("FUZZY"), icon: TextFieldsIcon, endpoint: 'scan' as const },
+          { key: 'phonetic', label: tr('matchMerge.phonetic'), desc: tr('matchMerge.doubleMetaphoneSoundMatching'), color: methodColor("PHONETIC"), icon: RecordVoiceOverIcon, endpoint: 'scan' as const },
+          { key: 'composite', label: tr('matchMerge.compositeRules'), desc: tr('matchMerge.weightedMultiFieldScoring'), color: methodColor("COMPOSITE"), icon: TuneIcon, endpoint: 'scan' as const },
+          { key: 'address', label: tr('matchMerge.addressLlm'), desc: tr('matchMerge.cortexNormalizedAddressComparison'), color: methodColor("ADDRESS"), icon: PlaceIcon, endpoint: 'scan' as const },
+          { key: 'embedding', label: tr('matchMerge.embedding'), desc: tr('matchMerge.cortexEmbedText768Cosine'), color: methodColor("EMBEDDING"), icon: HubIcon, endpoint: 'enrich' as const },
+          { key: 'llm_judge', label: tr('matchMerge.llmJudge'), desc: tr('matchMerge.cortexCompleteReasoningVerdict'), color: methodColor("LLM_JUDGE"), icon: PsychologyIcon, endpoint: 'enrich' as const },
         ];
 
         const modCfg = currentModule?.matching;
