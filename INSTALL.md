@@ -28,15 +28,23 @@ The script asks for the Snowflake CLI connection, the MDM database name (default
 
 Optional environment variables: `DEMO_CUSTOMER` (configuration under `data/<name>/config.json`, default
 `neutral`), `MIRROR_REFRESH` (default `1 minute`), `CREDIT_QUOTA` (monthly credits for the warehouse
-resource monitor, default `50`), `DMF_SCHEDULE` (default `60 MINUTE`).
+resource monitor, default `50`), `DMF_SCHEDULE` (default `60 MINUTE`), `PG_ALLOWED_CIDR` (IPv4 CIDRs allowed
+to reach Postgres, comma-separated, default this machine's public IP as `/32`), `PG_PASSWORD_PG` (`snowflake_admin`
+password of an instance created outside the script; skips the prompt).
 
 Steps the script runs:
 
 1. **Configuration**: checks the CLI connection and collects names.
 2. **Postgres**: creates the instance, applies the migrations (`postgres/NNN_*.sql`), maps your Snowflake
    login to the bootstrap MDM admin, sets the `mdm_app` password and stores both passwords in `~/.pgpass`.
+   A new instance accepts no connection until it has a network policy: the script creates the network rule
+   `<DB>.MDM_APP.<PG>_INGRESS` (mode `POSTGRES_INGRESS`, value `PG_ALLOWED_CIDR`) and the policy `<PG>_POLICY`,
+   and attaches it to the instance.
 3. **Snowflake objects**: database, warehouse and resource monitor, roles (`snowflake/001`), the CDC mirror,
-   then `snowflake/002`–`008`.
+   then `snowflake/002`–`008`. The script waits until every `mdm` table is mirrored before running `002`.
+   The first `SYNC_MODULES` run (in `008`) returns `pending: configuration not mirrored yet`: the module
+   configuration is written to `mdm.app_config` when the API starts for the first time (see "After the first
+   start").
 4. **RBAC**: grants the MDM roles.
 5. **Application**: installs npm dependencies and writes `mdm-api/.env.local` (no secrets).
 
@@ -53,6 +61,14 @@ CREATE POSTGRES INSTANCE MDM_PG
   COMPUTE_FAMILY = 'STANDARD_M' STORAGE_SIZE_GB = 50
   AUTHENTICATION_AUTHORITY = POSTGRES POSTGRES_VERSION = 17;
 SHOW POSTGRES INSTANCES;   -- note the host; the admin password is shown once at creation
+
+-- Allow connections (none are accepted without a network policy)
+CREATE DATABASE IF NOT EXISTS MDM;
+CREATE SCHEMA IF NOT EXISTS MDM.MDM_APP;
+CREATE NETWORK RULE MDM.MDM_APP.MDM_PG_INGRESS TYPE = IPV4 MODE = POSTGRES_INGRESS
+  VALUE_LIST = ('<your public IP>/32');
+CREATE NETWORK POLICY MDM_PG_POLICY ALLOWED_NETWORK_RULE_LIST = ('MDM.MDM_APP.MDM_PG_INGRESS');
+ALTER POSTGRES INSTANCE MDM_PG SET NETWORK_POLICY = 'MDM_PG_POLICY';
 ```
 
 ### 2. Migrations
@@ -87,7 +103,7 @@ The scripts are templates: names are passed as `snow sql -D` variables.
 ```bash
 VARS=(-D database=MDM -D mirror_database=MDM_MIRROR -D mirror_name=mdm_mirror -D warehouse=MDM_WH
       -D postgres_instance=MDM_PG -D credit_quota=50 -D dmf_schedule='60 MINUTE')
-for f in snowflake/00{1..7}_*.sql; do snow sql -c <connection> -f "$f" "${VARS[@]}"; done
+for f in snowflake/00{1..8}_*.sql; do snow sql -c <connection> -f "$f" "${VARS[@]}"; done
 ```
 
 | Script | Creates |
@@ -121,6 +137,22 @@ SF_PRIVATE_KEY_PATH=~/.snowflake/keys/mdm_svc.p8
 ```bash
 bash mdm-api/start-dev.sh   # API on :3001, dev auth (user switcher)
 cd mdm-ui && npm run dev    # UI on http://localhost:3000
+```
+
+#### After the first start
+
+On a fresh install, start the API once, wait for the next mirror refresh, then build the module objects:
+
+```sql
+CALL MDM.MDM_ANALYTICS.SYNC_MODULES(0);   -- per-module views, policies, DMFs, PUBLISH views, semantic view
+```
+
+Afterwards the API calls it on every module or field change.
+
+To reach Postgres from another network, add its address to the ingress rule:
+
+```sql
+ALTER NETWORK RULE MDM.MDM_APP.MDM_PG_INGRESS SET VALUE_LIST = ('203.0.113.4/32', '198.51.100.0/24');
 ```
 
 Tests: `cd mdm-api && npm test` (creates and drops a throwaway database), `cd mdm-ui && npx vitest run`.
