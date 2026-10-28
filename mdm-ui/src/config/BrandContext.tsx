@@ -172,7 +172,7 @@ export function BrandProvider({ children }: { children: ReactNode }) {
       .then(r => r.json())
       .then((data: BrandConfig) => {
         setConfig(data);
-        document.title = `${data.name} MDM`;
+        document.title = /\bMDM\b/i.test(data.name) ? data.name : `${data.name} MDM`;
       })
       .catch(() => setConfig(c => ({ ...c, authMode: c.authMode || 'none' })));
     load();

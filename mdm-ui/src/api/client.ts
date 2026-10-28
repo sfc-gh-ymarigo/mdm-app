@@ -172,6 +172,8 @@ export interface ModuleStats {
   by_country: { country: string; count: number }[] | null;
   /** One entry per configured list filter (other than stage and country) */
   breakdowns: { field: string; label: string; values: { key: string; value: string; count: number }[] }[];
+  /** Records created in the last 30 days */
+  created_30d: number;
 }
 
 export interface DashboardStats {
@@ -180,4 +182,18 @@ export interface DashboardStats {
   pending_matches: number;
   dq_by_type: { rule_type: string; rule_count: number; pass_rate: number }[];
   activity_summary: { entity_type: string; action: string; count: number }[];
+  /** Open workflows of the caller; unassigned = no assignee or 'system' */
+  my_work: {
+    mine: number; mine_high: number; mine_overdue: number; overdue: number; unassigned: number;
+    top: { id: number; entity_type: string; entity_id: string; workflow_type: string; current_stage: string; priority: string; due_date: string | null; entity_name: string | null }[];
+  };
+  trends: {
+    workflows_opened_30d: number;
+    workflows_closed_30d: number;
+    /** Daily overall DQ rule pass rate, empty until rules have run */
+    dq_pass_rate: { day: string; pass_rate: number }[];
+    dq_pass_rate_delta: number | null;
+    /** Last 30 days, one row per day */
+    activity: { day: string; INSERT: number; UPDATE: number; DELETE: number }[];
+  };
 }

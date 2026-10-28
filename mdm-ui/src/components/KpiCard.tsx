@@ -10,11 +10,13 @@ interface Props {
   icon: ReactNode;
   color: string;
   trend?: string;
+  /** Trend text color; defaults to success for '+…', error otherwise */
+  trendColor?: string;
   /** Route opened when the card is clicked */
   to?: string;
 }
 
-export default function KpiCard({ title, value, subtitle, icon, color, trend, to }: Props) {
+export default function KpiCard({ title, value, subtitle, icon, color, trend, trendColor, to }: Props) {
   const navigate = useNavigate();
   const theme = useTheme();
   const fg = theme.palette.text.primary;
@@ -44,7 +46,7 @@ export default function KpiCard({ title, value, subtitle, icon, color, trend, to
               </Typography>
             )}
             {trend && (
-              <Typography variant="caption" sx={{ color: trend.startsWith('+') ? statusColors().success : statusColors().error, fontWeight: 600, mt: 0.5, display: 'block' }}>
+              <Typography variant="caption" sx={{ color: trendColor || (trend.startsWith('+') ? statusColors().success : statusColors().error), fontWeight: 600, mt: 0.5, display: 'block' }}>
                 {trend}
               </Typography>
             )}
