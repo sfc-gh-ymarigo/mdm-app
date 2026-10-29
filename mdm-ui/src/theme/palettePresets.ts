@@ -31,6 +31,7 @@ export const PALETTE_PRESETS: PalettePreset[] = [
   { id: 'lagoon', name: 'Lagoon', shades: ['#0A0F14', '#0F3D3E', '#2E6F73', '#7FB3B8', '#EADCC8'], highlight: '#C6601F' },
   { id: 'dusk', name: 'Dusk', shades: ['#1A0F2E', '#3B1B4F', '#7A2E6F', '#D6598F', '#F4D7D4'], highlight: '#FF6B6B' },
   { id: 'forest-gold', name: 'Forest Gold', shades: ['#0B0F0D', '#1F2A1F', '#3E5A3F', '#8CA98C', '#D9C7A3'], highlight: '#B08D57' },
+  { id: 'graphite', name: 'Graphite', shades: ['#111213', '#1D1F22', '#3A3D42', '#8A8F98', '#D4D7DC'] },
 ];
 
 const rgb = (h: string) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
