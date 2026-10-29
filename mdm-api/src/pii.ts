@@ -94,6 +94,8 @@ export function maskValue(field: string, v: unknown): unknown {
 
 function maskDeep(node: unknown, fields: Set<string>, depth = 0): unknown {
   if (depth > 12 || node === null || typeof node !== 'object') return node;
+  // Dates (pg timestamps), Buffers etc. are values, not containers: keep them as is
+  if (node instanceof Date || Buffer.isBuffer(node)) return node;
   if (Array.isArray(node)) return node.map(n => maskDeep(n, fields, depth + 1));
   const obj = node as Record<string, unknown>;
   // Audit / change entries: { field: 'email', old_value, new_value }

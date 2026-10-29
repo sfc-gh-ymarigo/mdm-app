@@ -39,6 +39,14 @@ describe('PII masking (one rule for the app and Snowflake)', () => {
     expect(asAdmin.body.email).toBe('contact@pii-test.example');
   });
 
+  it('keeps timestamps intact in masked responses', async () => {
+    const c = await customer('Pii Dates', { email: 'dates@pii-test.example' });
+    const r = await as(app, steward.email).get(`/api/entities/customer/${c.id}`);
+    expect(r.headers['x-mdm-pii']).toBe('masked');
+    expect(typeof r.body.created_at).toBe('string');
+    expect(Number.isNaN(Date.parse(r.body.created_at))).toBe(false);
+  });
+
   it('drops PII from writes by masked users, keeps the other fields', async () => {
     const c = await customer('Pii Write', { email: 'keep@pii-test.example' });
     const r = await as(app, steward.email).put(`/api/entities/customer/${c.id}`, { email: 'evil@x.example', city: 'Lille' });
