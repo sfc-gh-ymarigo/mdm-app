@@ -630,7 +630,7 @@
     "awaitingAction": "Awaiting action",
     "matchCandidates": "Match Candidates",
     "potentialDuplicates": "Potential duplicates",
-    "mdmCommandCenter": "MDM Command Center",
+    "mdmCommandCenter": "{{name}} Command Center",
     "completenessV0": "Completeness: {{v0}}%",
     "dqRulesPassRatesBy": "DQ Rules — Pass Rates by Type",
     "noDqRulesHaveBeen": "No DQ rules have been evaluated yet. Run a DQ check from the Data Quality page.",

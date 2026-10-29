@@ -86,7 +86,7 @@ export default function Dashboard() {
   return (
     <Box>
       <Box sx={{ mb: 3 }}>
-        <Typography variant="h4" gutterBottom>{tr('dashboard.mdmCommandCenter')}</Typography>
+        <Typography variant="h4" gutterBottom>{tr('dashboard.mdmCommandCenter', { name: brand.name })}</Typography>
         <Typography variant="subtitle1">{brand.tagline}</Typography>
       </Box>
 

@@ -630,7 +630,7 @@
     "awaitingAction": "En attente d'action",
     "matchCandidates": "Doublons potentiels",
     "potentialDuplicates": "À examiner",
-    "mdmCommandCenter": "Centre de pilotage MDM",
+    "mdmCommandCenter": "Centre de pilotage {{name}}",
     "completenessV0": "Complétude : {{v0}} %",
     "dqRulesPassRatesBy": "Règles qualité — taux de réussite par type",
     "noDqRulesHaveBeen": "Aucune règle qualité n'a encore été évaluée. Lancez un contrôle depuis la page Qualité des données.",
