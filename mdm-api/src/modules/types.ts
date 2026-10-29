@@ -53,6 +53,8 @@ export interface ModuleConfig {
 
   // Entity-specific name field (displayed in lists, search results, audit trail)
   name_field: string;                // 'legal_name', 'name', 'company_name'
+  // Ordered columns of the records grid (besides name, source, stage, DQ). Unset: fields with list_display
+  list_columns?: string[];
 
   // Golden ID prefix (default 'G' + first letter of id: GC, GP, GS)
   golden_prefix?: string;

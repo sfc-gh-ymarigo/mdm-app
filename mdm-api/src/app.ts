@@ -25,7 +25,7 @@ import adminRouter from './routes/admin.js';
 import recordsRouter from './routes/records.js';
 import notificationsRouter from './routes/notifications.js';
 import { requireEditor } from './middleware/requireRole.js';
-import { loadConfig, getEnabledModules, getModules, getModule, getBranding } from './config.js';
+import { loadConfig, getEnabledModules, getModules, getModule, getBranding, getListColumns } from './config.js';
 import type { Router } from 'express';
 import { createEntityRouter } from './modules/entityRouter.js';
 import pool, { getAppUser, userPool } from './db.js';
@@ -168,7 +168,7 @@ app.get('/api/config', (_req, res) => {
   const modules = getEnabledModules().map(m => ({
     id: m.id, label: m.label, singular: m.singular, labels: m.labels, singular_labels: m.singular_labels, allow_create: m.allow_create,
     icon: m.icon, enabled: m.enabled, order: m.order,
-    name_field: m.name_field, country_scoped: m.country_scoped,
+    name_field: m.name_field, country_scoped: m.country_scoped, list_columns: m.list_columns ? getListColumns(m) : undefined,
     fields: m.fields, search: m.search, filters: m.filters,
     matching: m.matching, hierarchy: m.hierarchy, workflow: m.workflow,
   }));

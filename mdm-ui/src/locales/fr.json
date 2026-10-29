@@ -1092,7 +1092,8 @@
     "syncDetail": "Détail",
     "scdRowCounts": "Couche SCD — nombre de lignes",
     "recentRefreshes": "Derniers rafraîchissements des tables dynamiques",
-    "branding": "Identité visuelle"
+    "branding": "Identité visuelle",
+    "gridColumns": "Colonnes de la grille"
   },
   "access": {
     "title": "Pas d'accès à ce MDM",
@@ -1199,5 +1200,23 @@
     "children": "Enfants ({{length}})",
     "toMove": "{{entity}} à déplacer",
     "moved": "{{entity}} déplacé"
+  },
+  "gridColumns": {
+    "title": "Colonnes de la grille",
+    "help": "Choisissez les champs affichés en colonnes dans la grille des fiches de ce module, et leur ordre.",
+    "custom": "Personnalisé",
+    "default": "Par défaut",
+    "alwaysShown": "Toujours affichées :",
+    "name": "Nom",
+    "none": "Aucune colonne supplémentaire : la grille n’affiche que les colonnes fixes.",
+    "up": "Monter",
+    "down": "Descendre",
+    "remove": "Retirer",
+    "add": "Ajouter une colonne",
+    "cancel": "Annuler",
+    "restoreDefault": "Rétablir par défaut",
+    "saved": "Colonnes de la grille enregistrées",
+    "reset": "Colonnes de la grille rétablies par défaut",
+    "loadFailed": "Impossible de charger les colonnes"
   }
 }

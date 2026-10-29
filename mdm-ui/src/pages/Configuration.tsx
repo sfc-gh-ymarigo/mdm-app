@@ -48,6 +48,8 @@ import SecurityIcon from '@mui/icons-material/Security';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import PaletteIcon from '@mui/icons-material/Palette';
 import BrandingSettings from '../components/configuration/BrandingSettings';
+import GridColumnsSettings from '../components/configuration/GridColumnsSettings';
+import ViewColumnIcon from '@mui/icons-material/ViewColumn';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import TimelineIcon from '@mui/icons-material/Timeline';
@@ -231,6 +233,7 @@ const staticTree = (): TreeItem[] => [
 const moduleSubItems = () => [
   { suffix: 'general', label: tr('configuration.general'), icon: <InfoOutlinedIcon /> },
   { suffix: 'data-model', label: tr('configuration.dataModel'), icon: <AccountTreeIcon /> },
+  { suffix: 'grid', label: tr('configuration.gridColumns'), icon: <ViewColumnIcon /> },
   { suffix: 'data-quality', label: tr('configuration.dataQuality'), icon: <VerifiedUserIcon /> },
   { suffix: 'matching', label: tr('configuration.matching'), icon: <JoinInnerIcon /> },
   { suffix: 'hierarchy', label: tr('configuration.hierarchy'), icon: <DeviceHubIcon /> },
@@ -2702,6 +2705,7 @@ export default function Configuration() {
 
           {moduleSubTab === 'general' && renderModuleGeneral(mod)}
           {moduleSubTab === 'data-model' && renderModuleDataModel(mod)}
+          {moduleSubTab === 'grid' && <GridColumnsSettings key={mod.id} moduleId={mod.id} />}
           {moduleSubTab === 'data-quality' && renderModuleDataQuality(mod)}
           {moduleSubTab === 'matching' && renderModuleMatching(mod)}
           {moduleSubTab === 'hierarchy' && renderModuleHierarchy(mod)}

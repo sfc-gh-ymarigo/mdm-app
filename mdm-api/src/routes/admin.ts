@@ -3,7 +3,7 @@ import { sfQuery, SF_AUTH_MODE } from '../snowflake.js';
 import { sfObjects, sfName, setConfigActor, getModules, getModule, setModuleEnabled, setModuleProperty, setFieldActive, addCustomField, deleteCustomField, updateHierarchyConfig, updateMatchingConfig,
   getLanguages, addLanguage, setDefaultLanguage, setLanguageEnabled,
   getCountries, addCountry, setCountryEnabled, loadConfig, saveConfig,
-  getBranding, validateBranding, setBranding, DEFAULT_BRANDING } from '../config.js';
+  getBranding, validateBranding, setBranding, DEFAULT_BRANDING, gridCandidates, getListColumns, setListColumns } from '../config.js';
 import pool from '../db.js';
 import { asyncHandler } from '../asyncHandler.js';
 import { requireAdmin } from '../middleware/requireRole.js';
@@ -253,11 +253,35 @@ router.get('/modules', asyncHandler(async (_req, res) => {
   res.json(modules);
 }));
 
-// Any successful module/field change rebuilds the Snowflake module objects
+// Any successful module/field change rebuilds the Snowflake module objects (grid columns are UI-only)
 router.use('/modules', (req, res, next) => {
-  if (req.method !== 'GET') res.on('finish', () => { if (res.statusCode < 400 && !req.path.startsWith('/sync')) scheduleModuleSync(); });
+  if (req.method !== 'GET') res.on('finish', () => { if (res.statusCode < 400 && !req.path.startsWith('/sync') && !req.path.endsWith('/list-columns')) scheduleModuleSync(); });
   next();
 });
+
+// GET /api/admin/modules/:id/list-columns — ordered grid columns and the fields that can be added
+router.get('/modules/:id/list-columns', asyncHandler(async (req, res) => {
+  const mod = getModule(req.params.id);
+  if (!mod) return res.status(404).json({ error: `Module "${req.params.id}" not found` });
+  res.json({
+    columns: getListColumns(mod),
+    customized: Array.isArray(mod.list_columns),
+    available: gridCandidates(mod).map(f => ({ name: f.name, label: f.label, type: f.type, group: f.group })),
+  });
+}));
+
+// PUT /api/admin/modules/:id/list-columns — { columns: string[] } sets the order; { columns: null } resets
+router.put('/modules/:id/list-columns', asyncHandler(async (req, res) => {
+  const { columns } = req.body || {};
+  if (columns !== null && !(Array.isArray(columns) && columns.every(c => typeof c === 'string'))) {
+    return res.status(400).json({ error: 'columns must be an array of field names or null' });
+  }
+  let mod;
+  try { mod = setListColumns(req.params.id, columns); }
+  catch (e) { return res.status(400).json({ error: (e as Error).message }); }
+  if (!mod) return res.status(404).json({ error: `Module "${req.params.id}" not found` });
+  res.json({ columns: getListColumns(mod), customized: Array.isArray(mod.list_columns) });
+}));
 
 // GET /api/admin/modules/sync — state of the last Snowflake module sync + recent log
 router.get('/modules/sync', asyncHandler(async (_req, res) => {

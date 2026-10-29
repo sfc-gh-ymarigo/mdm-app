@@ -140,8 +140,12 @@ export default function ModuleList({ moduleId, load, extraTabs = [], nameCell, s
   const facetValues = (field: string) => (facets?.facets[field] ?? []).map(f => f.value).sort();
   const sourceSystems = [...new Set(['MANUAL', ...facetValues('source_system')])].sort();
   const summary: ListSummary = { total: facets?.total ?? total, facets: facets?.facets ?? {} };
-  const listFields = activeFields(mod).filter(f => f.list_display && f.name !== nameField);
-  const secondary = activeFields(mod).find(f => f.list_display && f.name !== nameField && f.type === 'text');
+  // Configured order wins; otherwise the list_display fields, the first text one shown under the name
+  const custom = mod.list_columns;
+  const listFields = custom
+    ? custom.map(n => activeFields(mod).find(f => f.name === n)).filter((f): f is NonNullable<typeof f> => !!f)
+    : activeFields(mod).filter(f => f.list_display && f.name !== nameField).slice(0, 6);
+  const secondary = custom ? undefined : listFields.find(f => f.type === 'text');
 
   const columns: GridColDef<EntityRecord>[] = [
     { field: nameField, headerName: fieldLabel(mod.fields.find(f => f.name === nameField) ?? { name: nameField, label: nameField, type: 'text', group: 'core' }), flex: 1.5, minWidth: 220,
@@ -152,7 +156,7 @@ export default function ModuleList({ moduleId, load, extraTabs = [], nameCell, s
         </Box>) },
     { field: 'source_system', headerName: t('list.source'), width: 100, renderCell: p => <Chip label={p.value} size="small" variant="outlined" sx={{ fontSize: '0.7rem' }} /> },
     { field: 'lifecycle_stage', headerName: t('list.stage'), width: 130, renderCell: p => p.value ? <StageChip stage={p.value} /> : null },
-    ...listFields.filter(f => f !== secondary).slice(0, 5).map<GridColDef<EntityRecord>>(f => ({
+    ...listFields.filter(f => f !== secondary).map<GridColDef<EntityRecord>>(f => ({
       field: f.name, headerName: fieldLabel(f), width: f.list_width ?? (f.type === 'ref' ? 110 : 140),
       renderCell: p => {
         const join = f.name.endsWith('_id') ? p.row[`${f.name.slice(0, -3)}_name`] : undefined;

@@ -274,6 +274,34 @@ export function setModuleEnabled(moduleId: string, enabled: boolean): ModuleConf
   return mod;
 }
 
+// ── Records grid columns ──
+// Fields the grid can show: active, not the name field, not system columns already shown by the grid
+const GRID_FIXED = new Set(['source_system', 'source_id', 'lifecycle_stage', 'dq_score', 'completeness']);
+export function gridCandidates(mod: ModuleConfig) {
+  return mod.fields.filter(f => f.active !== false && f.name !== mod.name_field && !GRID_FIXED.has(f.name));
+}
+export function getListColumns(mod: ModuleConfig): string[] {
+  const allowed = new Set(gridCandidates(mod).map(f => f.name));
+  return mod.list_columns
+    ? mod.list_columns.filter(n => allowed.has(n))
+    : gridCandidates(mod).filter(f => f.list_display).map(f => f.name);
+}
+/** Sets the ordered grid columns; null restores the field defaults. Throws on unknown fields. */
+export function setListColumns(moduleId: string, columns: string[] | null): ModuleConfig | undefined {
+  const cfg = loadConfig();
+  const mod = cfg.modules.find(m => m.id === moduleId);
+  if (!mod) return undefined;
+  if (columns === null) delete mod.list_columns;
+  else {
+    const allowed = new Set(gridCandidates(mod).map(f => f.name));
+    const bad = columns.filter(c => !allowed.has(c));
+    if (bad.length) throw new Error(`Unknown or inactive field(s): ${bad.join(', ')}`);
+    mod.list_columns = [...new Set(columns)];
+  }
+  saveConfig();
+  return mod;
+}
+
 export function setModuleProperty(moduleId: string, key: 'allow_create' | 'country_scoped' | 'country_null_all', value: boolean): ModuleConfig | undefined {
   const cfg = loadConfig();
   const mod = cfg.modules.find(m => m.id === moduleId);

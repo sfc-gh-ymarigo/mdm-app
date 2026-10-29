@@ -1092,7 +1092,8 @@
     "syncDetail": "Detail",
     "scdRowCounts": "SCD layer — row counts",
     "recentRefreshes": "Recent dynamic table refreshes",
-    "branding": "Branding"
+    "branding": "Branding",
+    "gridColumns": "Grid columns"
   },
   "access": {
     "title": "No access to this MDM",
@@ -1199,5 +1200,23 @@
     "children": "Children ({{length}})",
     "toMove": "{{entity}} to move",
     "moved": "{{entity}} moved"
+  },
+  "gridColumns": {
+    "title": "Records grid columns",
+    "help": "Choose which fields appear as columns in this module’s records grid, and their order.",
+    "custom": "Custom",
+    "default": "Default",
+    "alwaysShown": "Always shown:",
+    "name": "Name",
+    "none": "No extra columns: the grid shows only the fixed columns.",
+    "up": "Move up",
+    "down": "Move down",
+    "remove": "Remove",
+    "add": "Add a column",
+    "cancel": "Cancel",
+    "restoreDefault": "Restore default",
+    "saved": "Grid columns saved",
+    "reset": "Grid columns restored to default",
+    "loadFailed": "Could not load grid columns"
   }
 }

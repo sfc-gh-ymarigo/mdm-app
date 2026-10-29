@@ -34,6 +34,8 @@ export interface ModuleConfig {
   order: number;
   name_field: string;
   country_scoped?: boolean;
+  /** Ordered grid columns chosen in Configuration; unset = fields flagged list_display */
+  list_columns?: string[];
   fields: ModuleField[];
   search: { fields: string[]; fuzzy?: { fields: string[]; threshold?: number } };
   filters: Array<{ field: string; label: string; type: string; options_from?: string }>;
