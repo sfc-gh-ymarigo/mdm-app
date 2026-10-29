@@ -1191,7 +1191,9 @@
       "ADDRESS": "Address",
       "EMBEDDING": "Embedding",
       "LLM_JUDGE": "LLM judge"
-    }
+    },
+    "presets": "Palette presets",
+    "presetsHelp": "Pick a ready-made palette: it fills the brand colors, backgrounds and chart colors below. Review it in the preview, adjust if needed, then save."
   },
   "entityHierarchy": {
     "summary": "{{entities}} records · {{count}} with children · click a label to {{action}}, a node to expand",

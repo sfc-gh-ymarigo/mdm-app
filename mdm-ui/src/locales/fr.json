@@ -1191,7 +1191,9 @@
       "ADDRESS": "Adresse",
       "EMBEDDING": "Embedding",
       "LLM_JUDGE": "Juge LLM"
-    }
+    },
+    "presets": "Palettes prédéfinies",
+    "presetsHelp": "Choisissez une palette toute faite : elle remplit les couleurs de marque, les fonds et les couleurs des graphiques ci-dessous. Vérifiez l’aperçu, ajustez si besoin, puis enregistrez."
   },
   "entityHierarchy": {
     "summary": "{{entities}} enregistrements · {{count}} avec enfants · cliquez sur un libellé pour {{action}}, sur un nœud pour déplier",

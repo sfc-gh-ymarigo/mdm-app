@@ -19,6 +19,7 @@ import { useAsk } from '../common/Confirm';
 import { chartSeries, DEFAULT_CHARTS, DEFAULT_STATUS, DEFAULT_WORKFLOW_TYPES, DEFAULT_MATCH_METHODS, WORKFLOW_TYPES, MATCH_METHODS, DEFAULT_TYPOGRAPHY, FONT_STACKS,
   type StatusColors, type ChartsConfig, type TypographyConfig, type FontKey } from '../../theme/brandColors';
 import { tr } from '../../i18n';
+import { PALETTE_PRESETS, presetColors, presetSwatches, type PalettePreset } from '../../theme/palettePresets';
 
 interface Branding {
   name: string;
@@ -155,6 +156,11 @@ export default function BrandingSettings() {
   if (!draft) return <Box sx={{ p: 4, textAlign: 'center' }}><CircularProgress size={28} /></Box>;
 
   const set = (patch: Partial<Branding>) => setDraft(d => withGradients({ ...d!, ...patch }));
+  // Fills palette, backgrounds and chart series; identity, logo, status and typography are kept
+  const applyPreset = (p: PalettePreset) => {
+    const c = presetColors(p);
+    set({ palette: { ...c.palette }, darkBackground: { ...c.darkBackground, sidebarGradient: '' }, charts: { ...c.charts, colors: [...c.charts.colors] } });
+  };
   const setPalette = (k: keyof BrandPalette, v: string) => set({ palette: { ...draft.palette, [k]: v } });
   const setDark = (k: typeof DARK_KEYS[number], v: string) => set({ darkBackground: { ...draft.darkBackground, [k]: v } });
   const setStatus = (k: keyof StatusColors, v: string) => set({ status: { ...draft.status, [k]: v } });
@@ -226,6 +232,29 @@ export default function BrandingSettings() {
             <TextField size="small" fullWidth sx={{ mt: 2 }} label={tr('branding.logoUrl')} placeholder="https://…"
               value={logoIsUrl ? draft.logo : ''} onChange={e => set({ logo: e.target.value.trim() })}
               helperText={tr('branding.logoHelp')} />
+          </CardContent></Card>
+
+          <Card><CardContent>
+            <Typography variant="subtitle2" gutterBottom>{tr('branding.presets')}</Typography>
+            <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1.5 }}>{tr('branding.presetsHelp')}</Typography>
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 1.5 }}>
+              {PALETTE_PRESETS.map(p => {
+                const c = presetColors(p);
+                const active = draft.palette.primary === c.palette.primary && draft.darkBackground.default === c.darkBackground.default
+                  && draft.palette.secondary === c.palette.secondary;
+                return (
+                  <Box key={p.id} component="button" type="button" onClick={() => applyPreset(p)} aria-pressed={active}
+                    sx={{ p: 1, borderRadius: 2, cursor: 'pointer', textAlign: 'left', bgcolor: 'transparent', color: 'text.primary', font: 'inherit',
+                      border: `2px solid ${active ? theme.palette.primary.main : alpha(theme.palette.text.primary, 0.12)}`,
+                      '&:hover': { borderColor: active ? theme.palette.primary.main : alpha(theme.palette.text.primary, 0.3) } }}>
+                    <Box sx={{ display: 'flex', height: 34, borderRadius: 1, overflow: 'hidden', mb: 0.75 }}>
+                      {presetSwatches(p).map(s => <Box key={s} sx={{ flex: 1, bgcolor: s }} />)}
+                    </Box>
+                    <Typography variant="caption" sx={{ fontWeight: 600 }}>{p.name}</Typography>
+                  </Box>
+                );
+              })}
+            </Box>
           </CardContent></Card>
 
           <Card><CardContent>
