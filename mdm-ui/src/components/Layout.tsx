@@ -153,6 +153,16 @@ export default function Layout() {
           },
         }}
       >
+        {/* Decorative watermark: slow-spinning snowflake behind the menu */}
+        {!collapsed && (
+          <Box component="img" src="/logos/snowflake.png" alt="" aria-hidden
+            sx={{
+              position: 'absolute', width: 260, right: -80, bottom: 70, opacity: 0.06, pointerEvents: 'none', zIndex: 0,
+              animation: 'mdm-spin 60s linear infinite',
+              '@keyframes mdm-spin': { from: { transform: 'rotate(0deg)' }, to: { transform: 'rotate(360deg)' } },
+              '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
+            }} />
+        )}
         <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', minHeight: 64 }}>
           {!collapsed && (logoSrc(brand.logo)
             ? <Box component="img" src={logoSrc(brand.logo)} alt={brand.name} sx={{ maxHeight: 32, maxWidth: 170, ml: 0.5 }} />
