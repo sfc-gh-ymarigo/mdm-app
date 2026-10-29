@@ -124,11 +124,11 @@ export interface BrandConfig {
 const DEFAULT_CONFIG: BrandConfig = {
   hierarchyRoots: { productCatalog: 'Catalog', customerTree: 'Accounts' },
   id: '',
-  name: 'MDM',
-  fullName: 'MDM',
+  name: 'Glacier',
+  fullName: 'Glacier — MDM on Snowflake',
   tagline: 'Master Data Management — overview & quality insights',
   industry: '',
-  logo: 'snowflake-logo.svg',
+  logo: 'glacier-logo.svg',
   palette: {
     primary: '#29B5E8',
     primaryLight: '#56C8EF',

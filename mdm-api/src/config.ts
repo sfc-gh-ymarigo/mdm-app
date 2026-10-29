@@ -462,10 +462,10 @@ export function updateHierarchyConfig(moduleId: string, updates: Record<string, 
 // ── Branding ──
 // Defaults used by the "reset" action: Snowflake palette, flake watermark (empty logo).
 export const DEFAULT_BRANDING = {
-  name: 'MDM',
-  fullName: 'Master Data Management',
+  name: 'Glacier',
+  fullName: 'Glacier — MDM on Snowflake',
   tagline: 'Master Data Management — overview & quality insights',
-  logo: '',
+  logo: 'glacier-logo.svg',
   palette: {
     primary: '#29B5E8', primaryLight: '#56C8EF', primaryDark: '#1A8CB8',
     secondary: '#11567F', secondaryLight: '#1E7AAD', secondaryDark: '#0D3F5E',
